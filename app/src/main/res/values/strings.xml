@@ -1,0 +1,114 @@
+<resources>
+    <string name="app_name">NutrimaProto</string>
+    <string name="title_activity_map">NutriMap</string>
+    <string name="consumer_key">xZl4tVchOhvVfn6LEJCYcQ</string>
+    <string name="consumer_secret">lbftgJ7Am2aCIF7blZ52VD-Jc-0</string>
+    <string name="token">LrpXd1ubnJlAV-mQUrKPDN-63YtfeoPl</string>
+    <string name="token_secret">A8N7BrVd6zQfpEuxDimzr6ibNvU</string>
+    <string name="title_activity_business_details">BusinessDetailsActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_business_detail">BusinessDetail</string>
+    <string name="title_activity_delete">Delete</string>
+
+    <string-array name="gender_array">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+    <string-array name="body_type_array">
+        <item>Ectomorph</item>
+        <item>Mesomorph</item>
+        <item>Endomorph</item>
+    </string-array>
+
+    <string-array name="num_meals_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+
+    <string-array name="activity_level_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string-array name="weight_goal_array">
+        <item>Lose weight</item>
+        <item>Bulk up</item>
+        <item>Trim fat</item>
+        <item>Healthy lifestyle</item>
+    </string-array>
+
+    <string-array name="illnesses_array">
+        <item>Heart disease</item>
+        <item>Diabetes</item>
+        <item>Kidney disease</item>
+        <item>Liver disease</item>
+    </string-array>
+
+    <string-array name="allergies_array">
+        <item>Celiac/Gluten intolerance</item>
+        <item>Dairy</item>
+        <item>Egg</item>
+        <item>Fish</item>
+        <item>Shellfish</item>
+        <item>Soybeans</item>
+        <item>Nuts</item>
+        <item>Peanuts</item>
+    </string-array>
+
+    <string-array name="measures_array">
+        <item>teaspoon</item>
+        <item>teaspoons</item>
+        <item>tablespoon</item>
+        <item>tablespoons</item>
+        <item>fluid ounce</item>
+        <item>fluid ounces</item>
+        <item>gill</item>
+        <item>gills</item>
+        <item>cup</item>
+        <item>cups</item>
+        <item>pint</item>
+        <item>pints</item>
+        <item>quart</item>
+        <item>quarts</item>
+        <item>gallon</item>
+        <item>gallons</item>
+        <item>milliliter</item>
+        <item>milliliters</item>
+        <item>liter</item>
+        <item>liters</item>
+        <item>deciliter</item>
+        <item>deciliters</item>
+        <item>pound</item>
+        <item>pounds</item>
+        <item>ounce</item>
+        <item>ounces</item>
+        <item>milligram</item>
+        <item>milligrams</item>
+        <item>gram</item>
+        <item>grams</item>
+        <item>kilogram</item>
+        <item>kilograms</item>
+        <item>millimeter</item>
+        <item>millimeters</item>
+        <item>centimeter</item>
+        <item>centimeters</item>
+        <item>meter</item>
+        <item>meters</item>
+        <item>inch</item>
+        <item>inches</item>
+        <item>slice</item>
+        <item>slices</item>
+        <item>piece</item>
+        <item>pieces</item>
+    </string-array>
+</resources>
