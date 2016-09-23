@@ -236,11 +236,47 @@
                 android:text="Illnesses"
                 android:id="@+id/illnesses_textView"/>
 
-            <Spinner
+            <!--Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/illnesses_spinner"
-                android:entries="@array/illnesses_array"/>
+                android:entries="@array/illnesses_array"/-->
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Heart disease"
+                android:id="@+id/heart_disease_checkBox" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Diabetes"
+                android:id="@+id/diabetes_checkBox" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kidney disease"
+                android:id="@+id/kidney_disease_checkBox" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Liver disease"
+                android:id="@+id/liver_disease_checkBox" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Other - please specify below"
+                android:id="@+id/other_illness_checkBox" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/other_illness_editText"
+                android:hint="other illnesses"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -248,11 +284,65 @@
                 android:text="Allergies"
                 android:id="@+id/allergies_textView"/>
 
-            <Spinner
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Celiac/Gluten Allergy"
+                android:id="@+id/celiac_gluten_allergy_checkBox" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dairy Allergy"
+                android:id="@+id/dairy_allergy_checkBox" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Egg Allergy"
+                android:id="@+id/egg_allergy_checkBox" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fish Allergy"
+                android:id="@+id/fish_allergy_checkBox" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shellfish Allergy"
+                android:id="@+id/shellfish_allergy_checkBox" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Soybeans Allergy"
+                android:id="@+id/soybeans_allergy_checkBox" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nuts Allergy"
+                android:id="@+id/nuts_allergy_checkBox" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Peanuts Allergy"
+                android:id="@+id/peanuts_allergy_checkBox" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Other - please specify below"
+                android:id="@+id/other_allergy_checkBox" />
+
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/allergies_spinner"
-                android:entries="@array/allergies_array"/>
+                android:id="@+id/other_allergy_editText"
+                android:hint="other allergies"/>
 
         </LinearLayout>
     </ScrollView>
@@ -261,7 +351,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_weight="0.3">
-
 
         <Button
             android:layout_width="wrap_content"
