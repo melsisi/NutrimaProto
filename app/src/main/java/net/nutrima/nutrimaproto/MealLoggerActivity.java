@@ -16,14 +16,13 @@ import java.util.List;
 
 public class MealLoggerActivity extends AppCompatActivity {
 
-
     private final int VOICE_RECOGNITION_REQUEST_CODE = 1001;
 
-    private LogMealItemAdapter customAdapter;
+    private static LogMealItemAdapter customAdapter;
 
-    private ArrayList<ArrayList<String>> mealLogArray;
+    private static ArrayList<ArrayList<String>> mealLogArray;
 
-    private ArrayList<ArrayList<String>> mealLogDisplayArray;
+    private static ArrayList<ArrayList<String>> mealLogDisplayArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,15 +181,24 @@ public class MealLoggerActivity extends AppCompatActivity {
             if (!textMatchList.isEmpty()){
                 String spokenText = textMatchList.get(0);
                 String[] split = spokenText.split("\\s+");
+                ArrayList<String> newRow;
 
                 if (split.length > 3) {
                     // Create row from input text ////////////////////////////
-                    mealLogArray.add(createRowFromText(split));
+                    newRow = createRowFromText(split);
+                    mealLogArray.add(newRow);
                     //////////////////////////////////////////////////////////
 
-                    mealLogDisplayArray.clear();
-                    mealLogDisplayArray.addAll(mealLogArray);
-                    customAdapter.notifyDataSetChanged();
+                    List<String> potentialStrings = new ArrayList<>();
+                    for(NutritionUSDAEntry e : Globals.getInstance().getUSDATable()) {
+                        if(e.getFood().contains(newRow.get(newRow.size()-1)))
+                            potentialStrings.add(e.getFood());
+                    }
+
+                    MealLoggerDialogFragment dialog = new MealLoggerDialogFragment();
+                    dialog.setSpokenItem(newRow.get(newRow.size()-1));
+                    dialog.setPotentialsList(potentialStrings);
+                    dialog.show(getFragmentManager(), "Dialog");
                 }
                 else
                     showToastMessage("Captured sentence too short. Needs to be in the form" +
@@ -260,7 +268,8 @@ public class MealLoggerActivity extends AppCompatActivity {
 
         row.add(amount);
         row.add(measure);
-        row.add(item);
+        // Trimming extra space at end
+        row.add(item.substring(0, item.length()-1));
         return row;
     }
 
@@ -271,5 +280,12 @@ public class MealLoggerActivity extends AppCompatActivity {
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+
+    public static void refreshList(String correctedItem) {
+        mealLogArray.get(mealLogArray.size()-1).set(2, correctedItem);
+        mealLogDisplayArray.clear();
+        mealLogDisplayArray.addAll(mealLogArray);
+        customAdapter.notifyDataSetChanged();
     }
 }
