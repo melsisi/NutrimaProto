@@ -66,6 +66,7 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+        android:name="android.support.multidex.MultiDexApplication">
     </application>
 
 </manifest>

@@ -12,7 +12,7 @@
     <string name="signup_with_facebook">Signup with Facebook</string>
     <string name="signup_with_google">Signup with Google+</string>
     <string name="signup_via_email">Signup via email</string>
-    <string name="facebook_app_id" translatable="false">1188131611249427</string>
+    <string name="facebook_app_id" translatable="false">1140163042717628</string>
 
 
     <string-array name="gender_array">
