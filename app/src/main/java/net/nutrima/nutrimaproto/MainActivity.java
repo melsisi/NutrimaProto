@@ -2,22 +2,16 @@ package net.nutrima.nutrimaproto;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.sl.usermodel.Resources;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,7 +33,7 @@ public class MainActivity extends Activity {
         Globals.getInstance().setUSDATable(USDAList);
         //////////////////////////////////////////////////////////////////
 
-        final Button button = (Button) findViewById(R.id.log_on_button);
+        final Button button = (Button) findViewById(R.id.sneak_peak_button);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent activityChangeIntent = new Intent(MainActivity.this, PersonalInfoActivity.class);
