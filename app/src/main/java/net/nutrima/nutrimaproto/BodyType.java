@@ -1,0 +1,12 @@
+package net.nutrima.nutrimaproto;
+
+/**
+ * Created by ayehia on 9/22/2016.
+ */
+public enum BodyType {
+    //Person with a lean and delicate body build.
+    ECTOMORPH,
+    //
+    MESOMORPH,
+    ENDOMORPH
+}
