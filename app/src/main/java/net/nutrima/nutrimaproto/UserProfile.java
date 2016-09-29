@@ -13,13 +13,13 @@ public class UserProfile {
     private Gender gender = Gender.MALE;
 
     //Age in Years
-    private int age = -1;
+    private int age = 30;
 
     //Weight in kgs or pounds
-    private float weight = -1;
+    private float weight = (float) (179.5);
 
     //Height in cms or inches
-    private float height = -1;
+    private float height = (float) (66.9);
 
     //If a person describes himself as Atheletic
     private boolean atheletic = false;

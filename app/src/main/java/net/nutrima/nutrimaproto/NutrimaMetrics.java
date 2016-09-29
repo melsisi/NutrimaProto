@@ -10,25 +10,25 @@ public class NutrimaMetrics {
     // ===============================================
 
     //Calculated Body Mass Index
-    private double bmi = 0;
+    private double bmi = 25;
 
     //Calculated Base Metabolic Rate calories
-    private double bmr = 0;
+    private double bmr = 1833;
 
     //Calculated activity level calories
-    private double actLevelCal = 0;
+    private double actLevelCal = 367;
 
     //Calculated dialy total calories for weight maintenance
-    private double weightMainCal = 0;
+    private double weightMainCal = 2200;
 
     //Nutrima dialy recommended calories
-    private double calNutrima = 0;
+    private double calNutrima = 2200;
 
     //User daily recommended calories
-    private double calUser = 0;
+    private double calUser = 2200;
 
     //Body Fat %
-    private double bfDod = 100;
+    private double bfDod =100;
     private double bfYmca=100;
     private double bfYmcaModified=100;
     private double bfCovert=100;
@@ -71,15 +71,15 @@ public class NutrimaMetrics {
     private final byte trimFatMin       = 30;
     private final byte trimFatMax       = 40;
 
-    //Nutrima recommended dialy intake (this is what
-    private int proteinNutrima;
-    private int carbsNutrima;
-    private int fatNutrima;
-    private int satFatNutrima;
-    private int dietaryFiberNutrima;
-    private int addedSugarNutrima;
-    private int sodiumNutrima;
-    private double waterNutrima;
+    //Nutrima recommended daily intake (this is what
+    private int proteinNutrima=150;
+    private int carbsNutrima=250;
+    private int fatNutrima=44;
+    private int satFatNutrima=22;
+    private int dietaryFiberNutrima=28;
+    private int addedSugarNutrima=0;
+    private int sodiumNutrima=2300;
+    private double waterNutrima=69;
 
     //TODO: Add USDA vitamins and minerals recommended intake
 
@@ -430,8 +430,9 @@ public class NutrimaMetrics {
             return true;
     }
     private void calcBfDod(UserProfile userProfile) {
-        if (! checkBfInitValues(userProfile))
-                return;
+        if (! checkBfInitValues(userProfile)) {
+            return;
+        }
         try {
             if (userProfile.getMetricImperial() == MetricStandard.IMPERIAL) {
                 if (userProfile.getGender() == Gender.MALE)

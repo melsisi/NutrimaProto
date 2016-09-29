@@ -5,8 +5,9 @@ package net.nutrima.nutrimaproto;
  */
 public enum BodyType {
     //Person with a lean and delicate body build.
+    MESOMORPH,
+    //
     ECTOMORPH,
     //
-    MESOMORPH,
     ENDOMORPH
 }
