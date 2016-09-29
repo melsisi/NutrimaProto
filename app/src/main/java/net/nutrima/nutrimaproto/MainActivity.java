@@ -76,6 +76,11 @@ public class MainActivity extends Activity {
         Globals.getInstance().setUSDATable(USDAList);
         //////////////////////////////////////////////////////////////////
 
+        // Start location service ////////////////////////////////////////
+        //Intent intent = new Intent(this, LocationService.class);
+        //startService(intent);
+        //////////////////////////////////////////////////////////////////
+
         //If access token is already here, set fb session and proceed to application
         final AccessToken fbAccessToken = AccessToken.getCurrentAccessToken();
         if (fbAccessToken != null) {

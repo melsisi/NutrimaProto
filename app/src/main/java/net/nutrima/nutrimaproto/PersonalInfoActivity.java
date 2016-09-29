@@ -45,5 +45,15 @@ public class PersonalInfoActivity extends AppCompatActivity {
             }
         });
         //////////////////////////////////////////////////////////////////
+
+        // Setup Progress button /////////////////////////////////////////
+        final Button progressButton = (Button) findViewById(R.id.progress_button);
+        progressButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent activityChangeIntent = new Intent(PersonalInfoActivity.this, ProgressActivity.class);
+                startActivity(activityChangeIntent);
+            }
+        });
+        //////////////////////////////////////////////////////////////////
     }
 }
