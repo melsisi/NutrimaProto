@@ -2,6 +2,7 @@ package net.nutrima.nutrimaproto;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,6 +52,7 @@ public class PersonalInfoActivity extends AppCompatActivity {
         if(savedUserProfile != null)
             populateData(savedUserProfile);
         //////////////////////////////////////////////////////////////////
+
         // Setup Map view button /////////////////////////////////////////
         final Button mapViewButton = (Button) findViewById(R.id.map_view_button);
         mapViewButton.setOnClickListener(new View.OnClickListener() {
@@ -242,6 +244,7 @@ public class PersonalInfoActivity extends AppCompatActivity {
         return myeditText.getText().toString().trim().length() == 0;
     }
 
+    @Nullable
     private UserProfile readDataFromFile() {
         UserProfile userProfile = null;
 
@@ -280,5 +283,136 @@ public class PersonalInfoActivity extends AppCompatActivity {
     }
 
     private void populateData(UserProfile savedUserProfile) {
+
+        // section 1 //////////////////
+        switch (savedUserProfile.getGender()) {
+            case MALE:
+                ((Spinner) findViewById(R.id.gender_spinner)).setSelection(0, true);
+                break;
+            case FEMALE:
+                ((Spinner) findViewById(R.id.gender_spinner)).setSelection(1, true);
+                break;
+            case BREAST_FEEDING_FEMALE:
+                ((Spinner) findViewById(R.id.gender_spinner)).setSelection(2, true);
+                break;
+            case PREGNANT_FEMALE:
+                ((Spinner) findViewById(R.id.gender_spinner)).setSelection(3, true);
+                break;
+        }
+        ((Spinner) findViewById(R.id.age_spinner)).setSelection(savedUserProfile.getAge() - 10);
+        ((EditText) findViewById(R.id.height_editText)).
+                setText(Float.toString(savedUserProfile.getHeight()));
+        ((EditText) findViewById(R.id.weight_editText)).
+                setText(Float.toString(savedUserProfile.getWeight()));
+        ///////////////////////////////
+
+        // section 2 //////////////////
+        ((EditText) findViewById(R.id.waist_editText)).
+                setText(Float.toString(savedUserProfile.getWaist()));
+        ((EditText) findViewById(R.id.hips_editText)).
+                setText(Float.toString(savedUserProfile.getHips()));
+        ((EditText) findViewById(R.id.wrist_editText)).
+                setText(Float.toString(savedUserProfile.getWrist()));
+        ((EditText) findViewById(R.id.forearm_editText)).
+                setText(Float.toString(savedUserProfile.getForearm()));
+        ((EditText) findViewById(R.id.neck_editText)).
+                setText(Float.toString(savedUserProfile.getNeck()));
+        ((EditText) findViewById(R.id.thigh_editText)).
+                setText(Float.toString(savedUserProfile.getThigh()));
+        ((EditText) findViewById(R.id.calf_editText)).
+                setText(Float.toString(savedUserProfile.getCalf()));
+        ///////////////////////////////
+
+        // section 3 //////////////////
+        switch (savedUserProfile.getbType()) {
+            case ECTOMORPH:
+                ((Spinner) findViewById(R.id.body_type_spinner)).setSelection(0, true);
+                break;
+            case MESOMORPH:
+                ((Spinner) findViewById(R.id.body_type_spinner)).setSelection(1, true);
+                break;
+            case ENDOMORPH:
+                ((Spinner) findViewById(R.id.body_type_spinner)).setSelection(2, true);
+                break;
+        }
+        ((Spinner) findViewById(R.id.num_meals_spinner)).
+                setSelection(savedUserProfile.getNumOfMeals() - 1, true);
+        switch (savedUserProfile.getActLevel()) {
+            case SEDENTARY:
+                ((Spinner) findViewById(R.id.activity_level_spinner)).setSelection(0, true);
+                break;
+            case LIGHT_ACTIVE:
+                ((Spinner) findViewById(R.id.activity_level_spinner)).setSelection(1, true);
+                break;
+            case MODERATE_ACTIVE:
+                ((Spinner) findViewById(R.id.activity_level_spinner)).setSelection(2, true);
+                break;
+            case HIGH_ACTIVE:
+                ((Spinner) findViewById(R.id.activity_level_spinner)).setSelection(3, true);
+                break;
+            case VERY_HIGH_ACTIVE:
+                ((Spinner) findViewById(R.id.activity_level_spinner)).setSelection(4, true);
+                break;
+        }
+        switch (savedUserProfile.getWeightGoal()) {
+            case LOSE:
+                ((Spinner) findViewById(R.id.weight_goal_spinner)).setSelection(0, true);
+                break;
+            case BULKUP:
+                ((Spinner) findViewById(R.id.weight_goal_spinner)).setSelection(1, true);
+                break;
+            case MAINTAIN:
+                ((Spinner) findViewById(R.id.weight_goal_spinner)).setSelection(2, true);
+                break;
+        }
+        ((EditText) findViewById(R.id.calorie_offset_editText)).
+                setText(Integer.toString(savedUserProfile.getCalorieOffset()));
+        ///////////////////////////////
+
+        // section 4 //////////////////
+        if(savedUserProfile.isHeartDisease())
+            ((CheckBox) findViewById(R.id.heart_disease_checkBox)).setChecked(true);
+        if(savedUserProfile.isDiabetic())
+            ((CheckBox) findViewById(R.id.diabetes_checkBox)).setChecked(true);
+        if(savedUserProfile.isKidneyDisease())
+            ((CheckBox) findViewById(R.id.kidney_disease_checkBox)).setChecked(true);
+        if(savedUserProfile.isLiverDisease())
+            ((CheckBox) findViewById(R.id.liver_disease_checkBox)).setChecked(true);
+        if(savedUserProfile.isCancerDisease())
+            ((CheckBox) findViewById(R.id.cancer_disease_checkBox)).setChecked(true);
+        if(savedUserProfile.isHighBloodPressure())
+            ((CheckBox) findViewById(R.id.hbp_disease_checkBox)).setChecked(true);
+        if(savedUserProfile.isCeliacDisease())
+            ((CheckBox) findViewById(R.id.celiac_disease_checkBox)).setChecked(true);
+        if(savedUserProfile.getOtherDiseases().length() > 0) {
+            ((CheckBox) findViewById(R.id.other_illness_checkBox)).setChecked(true);
+            ((EditText) findViewById(R.id.other_illness_editText)).
+                    setText(savedUserProfile.getOtherDiseases());
+        }
+        ///////////////////////////////
+
+        // section 5 //////////////////
+        if(savedUserProfile.isGlutenIntorlerance())
+            ((CheckBox) findViewById(R.id.celiac_gluten_allergy_checkBox)).setChecked(true);
+        if(savedUserProfile.isDiaryAllergy())
+            ((CheckBox) findViewById(R.id.dairy_allergy_checkBox)).setChecked(true);
+        if(savedUserProfile.isEggAllergy())
+            ((CheckBox) findViewById(R.id.egg_allergy_checkBox)).setChecked(true);
+        if(savedUserProfile.isFishAllergy())
+            ((CheckBox) findViewById(R.id.fish_allergy_checkBox)).setChecked(true);
+        if(savedUserProfile.isShellfishAllergy())
+            ((CheckBox) findViewById(R.id.shellfish_allergy_checkBox)).setChecked(true);
+        if(savedUserProfile.isSoyAllergy())
+            ((CheckBox) findViewById(R.id.soybeans_allergy_checkBox)).setChecked(true);
+        if(savedUserProfile.isNutsAllergy())
+            ((CheckBox) findViewById(R.id.nuts_allergy_checkBox)).setChecked(true);
+        if(savedUserProfile.isPeanutsAllergy())
+            ((CheckBox) findViewById(R.id.peanuts_allergy_checkBox)).setChecked(true);
+        if(savedUserProfile.getOtherAllergies().length() > 0) {
+            ((CheckBox) findViewById(R.id.other_allergy_checkBox)).setChecked(true);
+            ((EditText) findViewById(R.id.other_allergy_editText)).
+                    setText(savedUserProfile.getOtherAllergies());
+        }
+        ///////////////////////////////
     }
 }
