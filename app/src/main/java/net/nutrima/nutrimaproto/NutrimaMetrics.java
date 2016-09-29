@@ -716,7 +716,7 @@ public class NutrimaMetrics {
 
 
     //Calculation Main method
-    public void CalcNutrima (UserProfile userProfile){
+    public void calcNutrima (UserProfile userProfile){
         calcBmi (userProfile);
         calcCalNutrima (userProfile);
         calcBfNutrima (userProfile);
