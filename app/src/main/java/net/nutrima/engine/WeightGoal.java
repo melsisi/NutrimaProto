@@ -1,4 +1,4 @@
-package net.nutrima.nutrimaproto;
+package net.nutrima.engine;
 
 /**
  * Created by ayehia on 9/22/2016.

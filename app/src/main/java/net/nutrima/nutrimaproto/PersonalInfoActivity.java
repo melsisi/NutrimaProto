@@ -1,12 +1,32 @@
 package net.nutrima.nutrimaproto;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import net.nutrima.engine.ActivityLevel;
+import net.nutrima.engine.BodyType;
+import net.nutrima.engine.Gender;
+import net.nutrima.engine.MetricStandard;
+import net.nutrima.engine.NutrimaMetrics;
+import net.nutrima.engine.UserProfile;
+import net.nutrima.engine.WeightGoal;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class PersonalInfoActivity extends AppCompatActivity {
 
@@ -26,12 +46,18 @@ public class PersonalInfoActivity extends AppCompatActivity {
         spinner.setAdapter(ageSpinnerAdapter);
         //////////////////////////////////////////////////////////////////
 
+        // Populate info from file ///////////////////////////////////////
+        UserProfile savedUserProfile = readDataFromFile();
+        if(savedUserProfile != null)
+            populateData(savedUserProfile);
+        //////////////////////////////////////////////////////////////////
         // Setup Map view button /////////////////////////////////////////
         final Button mapViewButton = (Button) findViewById(R.id.map_view_button);
         mapViewButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent activityChangeIntent = new Intent(PersonalInfoActivity.this, MapActivity.class);
                 startActivity(activityChangeIntent);
+                collectDataFromUI();
             }
         });
         //////////////////////////////////////////////////////////////////
@@ -42,6 +68,7 @@ public class PersonalInfoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent activityChangeIntent = new Intent(PersonalInfoActivity.this, MealLoggerActivity.class);
                 startActivity(activityChangeIntent);
+                collectDataFromUI();
             }
         });
         //////////////////////////////////////////////////////////////////
@@ -52,8 +79,206 @@ public class PersonalInfoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent activityChangeIntent = new Intent(PersonalInfoActivity.this, ProgressActivity.class);
                 startActivity(activityChangeIntent);
+                collectDataFromUI();
             }
         });
         //////////////////////////////////////////////////////////////////
+    }
+
+    private void collectDataFromUI() {
+        UserProfile userProfile = new UserProfile();
+
+        userProfile.setAtheletic(false);
+
+        userProfile.setMetricImperial(MetricStandard.METRIC);
+
+        // section 1 //////////////////
+        switch (((Spinner) findViewById(R.id.gender_spinner)).getSelectedItem().toString()) {
+            case "Male":
+                userProfile.setGender(Gender.MALE);
+                break;
+            case "Female":
+                userProfile.setGender(Gender.FEMALE);
+                break;
+            case "Breastfeeding Female":
+                userProfile.setGender(Gender.BREAST_FEEDING_FEMALE);
+                break;
+            case "Pregnant Female":
+                userProfile.setGender(Gender.PREGNANT_FEMALE);
+                break;
+        }
+        userProfile.setAge(Integer.parseInt(
+                ((Spinner) findViewById(R.id.age_spinner)).getSelectedItem().toString()));
+        if(!isEmpty(((EditText) findViewById(R.id.height_editText))))
+            userProfile.setHeight(Float.parseFloat(
+                    ((EditText) findViewById(R.id.height_editText)).getText().toString()));
+        if(!isEmpty(((EditText) findViewById(R.id.weight_editText))))
+            userProfile.setWeight(Float.parseFloat(
+                    ((EditText) findViewById(R.id.weight_editText)).getText().toString()));
+        ///////////////////////////////
+
+        // section 2 //////////////////
+        if(!isEmpty(((EditText) findViewById(R.id.waist_editText))))
+            userProfile.setWaist(Float.parseFloat(
+                    ((EditText) findViewById(R.id.waist_editText)).getText().toString()));
+        if(!isEmpty(((EditText) findViewById(R.id.hips_editText))))
+            userProfile.setHips(Float.parseFloat(
+                    ((EditText) findViewById(R.id.hips_editText)).getText().toString()));
+        if(!isEmpty(((EditText) findViewById(R.id.wrist_editText))))
+            userProfile.setWrist(Float.parseFloat(
+                    ((EditText) findViewById(R.id.wrist_editText)).getText().toString()));
+        if(!isEmpty(((EditText) findViewById(R.id.forearm_editText))))
+            userProfile.setForearm(Float.parseFloat(
+                    ((EditText) findViewById(R.id.forearm_editText)).getText().toString()));
+        if(!isEmpty(((EditText) findViewById(R.id.neck_editText))))
+            userProfile.setNeck(Float.parseFloat(
+                    ((EditText) findViewById(R.id.neck_editText)).getText().toString()));
+        if(!isEmpty(((EditText) findViewById(R.id.thigh_editText))))
+            userProfile.setThigh(Float.parseFloat(
+                    ((EditText) findViewById(R.id.thigh_editText)).getText().toString()));
+        if(!isEmpty(((EditText) findViewById(R.id.calf_editText))))
+            userProfile.setCalf(Float.parseFloat(
+                    ((EditText) findViewById(R.id.calf_editText)).getText().toString()));
+        ///////////////////////////////
+
+        // section 3 //////////////////
+        switch (((Spinner) findViewById(R.id.body_type_spinner)).getSelectedItem().toString()) {
+            case "Ectomorph":
+                userProfile.setbType(BodyType.ECTOMORPH);
+                break;
+            case "Mesomorph":
+                userProfile.setbType(BodyType.MESOMORPH);
+                break;
+            case "Endomorph":
+                userProfile.setbType(BodyType.ENDOMORPH);
+                break;
+        }
+        userProfile.setNumOfMeals(Byte.valueOf(
+                ((Spinner) findViewById(R.id.num_meals_spinner)).getSelectedItem().toString()));
+        switch (((Spinner) findViewById(R.id.activity_level_spinner)).getSelectedItem().toString()) {
+            case "Sedentary":
+                userProfile.setActLevel(ActivityLevel.SEDENTARY);
+                break;
+            case "Light activity":
+                userProfile.setActLevel(ActivityLevel.LIGHT_ACTIVE);
+                break;
+            case "Moderate activity":
+                userProfile.setActLevel(ActivityLevel.MODERATE_ACTIVE);
+                break;
+            case "High activity":
+                userProfile.setActLevel(ActivityLevel.HIGH_ACTIVE);
+                break;
+            case "Very high activity":
+                userProfile.setActLevel(ActivityLevel.VERY_HIGH_ACTIVE);
+                break;
+        }
+        switch (((Spinner) findViewById(R.id.weight_goal_spinner)).getSelectedItem().toString()) {
+            case "Lose weight":
+                userProfile.setWeightGoal(WeightGoal.LOSE);
+                break;
+            case "Bulk up":
+                userProfile.setWeightGoal(WeightGoal.BULKUP);
+                break;
+            case "Maintain":
+                userProfile.setWeightGoal(WeightGoal.MAINTAIN);
+                break;
+        }
+        if(!isEmpty(((EditText) findViewById(R.id.calorie_offset_editText))))
+            userProfile.setCalorieOffset(Integer.parseInt(
+                    ((EditText) findViewById(R.id.calorie_offset_editText)).getText().toString()));
+        ///////////////////////////////
+
+        // section 4 //////////////////
+        if(((CheckBox) findViewById(R.id.heart_disease_checkBox)).isChecked())
+            userProfile.setHeartDisease(true);
+        if(((CheckBox) findViewById(R.id.diabetes_checkBox)).isChecked())
+            userProfile.setDiabetic(true);
+        if(((CheckBox) findViewById(R.id.kidney_disease_checkBox)).isChecked())
+            userProfile.setKidneyDisease(true);
+        if(((CheckBox) findViewById(R.id.liver_disease_checkBox)).isChecked())
+            userProfile.setLiverDisease(true);
+        if(((CheckBox) findViewById(R.id.cancer_disease_checkBox)).isChecked())
+            userProfile.setCancerDisease(true);
+        if(((CheckBox) findViewById(R.id.hbp_disease_checkBox)).isChecked())
+            userProfile.setHighBloodPressure(true);
+        if(((CheckBox) findViewById(R.id.celiac_disease_checkBox)).isChecked())
+            userProfile.setCeliacDisease(true);
+        if(((CheckBox) findViewById(R.id.other_illness_checkBox)).isChecked())
+            if(!isEmpty(((EditText) findViewById(R.id.other_illness_editText))))
+                userProfile.setOtherDiseases(
+                        ((EditText) findViewById(R.id.other_illness_editText)).getText().toString());
+        ///////////////////////////////
+
+        // section 5 //////////////////
+        if(((CheckBox) findViewById(R.id.celiac_gluten_allergy_checkBox)).isChecked())
+            userProfile.setGlutenIntorlerance(true);
+        if(((CheckBox) findViewById(R.id.dairy_allergy_checkBox)).isChecked())
+            userProfile.setDiaryAllergy(true);
+        if(((CheckBox) findViewById(R.id.egg_allergy_checkBox)).isChecked())
+            userProfile.setEggAllergy(true);
+        if(((CheckBox) findViewById(R.id.fish_allergy_checkBox)).isChecked())
+            userProfile.setFishAllergy(true);
+        if(((CheckBox) findViewById(R.id.shellfish_allergy_checkBox)).isChecked())
+            userProfile.setShellfishAllergy(true);
+        if(((CheckBox) findViewById(R.id.soybeans_allergy_checkBox)).isChecked())
+            userProfile.setSoyAllergy(true);
+        if(((CheckBox) findViewById(R.id.nuts_allergy_checkBox)).isChecked())
+            userProfile.setNutsAllergy(true);
+        if(((CheckBox) findViewById(R.id.peanuts_allergy_checkBox)).isChecked())
+            userProfile.setPeanutsAllergy(true);
+        if(((CheckBox) findViewById(R.id.other_allergy_checkBox)).isChecked())
+            if(!isEmpty(((EditText) findViewById(R.id.other_allergy_editText))))
+                userProfile.setOtherAllergies(
+                        ((EditText) findViewById(R.id.other_allergy_editText)).getText().toString());
+        ///////////////////////////////
+
+        NutrimaMetrics nutrimaMetrics = new NutrimaMetrics();
+        nutrimaMetrics.calcNutrima(userProfile);
+        Globals.getInstance().setNutrimaMetrics(nutrimaMetrics);
+        saveDataToStorage(userProfile);
+    }
+
+    private boolean isEmpty(EditText myeditText) {
+        return myeditText.getText().toString().trim().length() == 0;
+    }
+
+    private UserProfile readDataFromFile() {
+        UserProfile userProfile = null;
+
+        try {
+            FileInputStream fis = openFileInput("TEST");
+            ObjectInputStream is = null;
+
+            is = new ObjectInputStream(fis);
+
+            userProfile = (UserProfile) is.readObject();
+            is.close();
+            fis.close();
+        } catch (IOException e) {
+            return null;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return userProfile;
+    }
+
+    private void saveDataToStorage(UserProfile dataToSave) {
+        FileOutputStream fos = null;
+        try {
+            fos = openFileOutput("TEST", Context.MODE_PRIVATE);
+
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(dataToSave);
+            os.close();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void populateData(UserProfile savedUserProfile) {
     }
 }

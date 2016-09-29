@@ -1,4 +1,4 @@
-package net.nutrima.nutrimaproto;
+package net.nutrima.engine;
 
 /**
  * Created by ayehia on 9/22/2016.
@@ -82,7 +82,7 @@ public class NutrimaMetrics {
     private double waterNutrima=69;
 
     //TODO: Add USDA vitamins and minerals recommended intake
-
+    
     //--- getters ---
     public double getBmi() {
         return bmi;
@@ -777,4 +777,6 @@ public class NutrimaMetrics {
     public void setWaterNutrima(int waterNutrima) {
         this.waterNutrima = waterNutrima;
     }
+
+    
 }

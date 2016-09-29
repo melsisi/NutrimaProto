@@ -18,6 +18,8 @@
     <string-array name="gender_array">
         <item>Male</item>
         <item>Female</item>
+        <item>Breastfeeding Female</item>
+        <item>Pregnant Female</item>
     </string-array>
 
     <string-array name="body_type_array">
@@ -38,18 +40,18 @@
     </string-array>
 
     <string-array name="activity_level_array">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
+        <item>Sedentary</item>
+        <item>Light activity</item>
+        <item>Moderate activity</item>
+        <item>High activity</item>
+        <item>Very high activity</item>
     </string-array>
 
     <string-array name="weight_goal_array">
         <item>Lose weight</item>
         <item>Bulk up</item>
-        <item>Trim fat</item>
-        <item>Healthy lifestyle</item>
+        <!--item>Trim fat</item-->
+        <item>Maintain</item>
     </string-array>
 
     <string-array name="illnesses_array">

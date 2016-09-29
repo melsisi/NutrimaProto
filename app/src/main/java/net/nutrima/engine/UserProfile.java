@@ -1,10 +1,12 @@
-package net.nutrima.nutrimaproto;
+package net.nutrima.engine;
+
+import java.io.Serializable;
 
 /**
  * Created by ayehia on 9/22/2016.
  */
 
-public class UserProfile {
+public class UserProfile implements Serializable{
 
     //Parameter to define if we are working with metric or imperial settings
     private MetricStandard metricImperial = MetricStandard.IMPERIAL;
@@ -147,7 +149,7 @@ public class UserProfile {
         this.weightGoal = weightGoal;
     }
 
-    public void setCalorieOffset(byte calorieOffset) {
+    public void setCalorieOffset(int calorieOffset) {
         this.calorieOffset = calorieOffset;
     }
 
