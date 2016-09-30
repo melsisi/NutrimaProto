@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import net.nutrima.engine.ActivityLevel;
@@ -37,8 +38,9 @@ public class PersonalInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_personal_info);
 
         // Populate age spinner //////////////////////////////////////////
-        String[] age_array = new String[90];
-        for(int i = 0; i < 90; i++)
+        String[] age_array = new String[91];
+        age_array[0] = "Select one";
+        for(int i = 1; i < 91; i++)
             age_array[i] = Integer.toString(i + 10);
         Spinner spinner = (Spinner) findViewById(R.id.age_spinner);
         ArrayAdapter<String> ageSpinnerAdapter = new ArrayAdapter<>(
@@ -92,7 +94,10 @@ public class PersonalInfoActivity extends AppCompatActivity {
 
         userProfile.setAtheletic(false);
 
-        userProfile.setMetricImperial(MetricStandard.METRIC);
+        if(((Switch)findViewById(R.id.imp_metric_switch)).isChecked())
+            userProfile.setMetricImperial(MetricStandard.METRIC);
+        else
+            userProfile.setMetricImperial(MetricStandard.IMPERIAL);
 
         // section 1 //////////////////
         switch (((Spinner) findViewById(R.id.gender_spinner)).getSelectedItem().toString()) {
@@ -109,8 +114,10 @@ public class PersonalInfoActivity extends AppCompatActivity {
                 userProfile.setGender(Gender.PREGNANT_FEMALE);
                 break;
         }
-        userProfile.setAge(Integer.parseInt(
-                ((Spinner) findViewById(R.id.age_spinner)).getSelectedItem().toString()));
+        if(!((Spinner) findViewById(R.id.age_spinner))
+                .getSelectedItem().toString().equals("Select one"))
+            userProfile.setAge(Integer.parseInt(
+                    ((Spinner) findViewById(R.id.age_spinner)).getSelectedItem().toString()));
         if(!isEmpty(((EditText) findViewById(R.id.height_editText))))
             userProfile.setHeight(Float.parseFloat(
                     ((EditText) findViewById(R.id.height_editText)).getText().toString()));
@@ -155,8 +162,10 @@ public class PersonalInfoActivity extends AppCompatActivity {
                 userProfile.setbType(BodyType.ENDOMORPH);
                 break;
         }
-        userProfile.setNumOfMeals(Byte.valueOf(
-                ((Spinner) findViewById(R.id.num_meals_spinner)).getSelectedItem().toString()));
+        if(!((Spinner) findViewById(R.id.num_meals_spinner)).
+                getSelectedItem().toString().equals("Select one"))
+            userProfile.setNumOfMeals(Byte.valueOf(
+                    ((Spinner) findViewById(R.id.num_meals_spinner)).getSelectedItem().toString()));
         switch (((Spinner) findViewById(R.id.activity_level_spinner)).getSelectedItem().toString()) {
             case "Sedentary":
                 userProfile.setActLevel(ActivityLevel.SEDENTARY);
@@ -287,19 +296,19 @@ public class PersonalInfoActivity extends AppCompatActivity {
         // section 1 //////////////////
         switch (savedUserProfile.getGender()) {
             case MALE:
-                ((Spinner) findViewById(R.id.gender_spinner)).setSelection(0, true);
-                break;
-            case FEMALE:
                 ((Spinner) findViewById(R.id.gender_spinner)).setSelection(1, true);
                 break;
-            case BREAST_FEEDING_FEMALE:
+            case FEMALE:
                 ((Spinner) findViewById(R.id.gender_spinner)).setSelection(2, true);
                 break;
-            case PREGNANT_FEMALE:
+            case BREAST_FEEDING_FEMALE:
                 ((Spinner) findViewById(R.id.gender_spinner)).setSelection(3, true);
                 break;
+            case PREGNANT_FEMALE:
+                ((Spinner) findViewById(R.id.gender_spinner)).setSelection(4, true);
+                break;
         }
-        ((Spinner) findViewById(R.id.age_spinner)).setSelection(savedUserProfile.getAge() - 10);
+        ((Spinner) findViewById(R.id.age_spinner)).setSelection(savedUserProfile.getAge() - 10 + 1);
         ((EditText) findViewById(R.id.height_editText)).
                 setText(Float.toString(savedUserProfile.getHeight()));
         ((EditText) findViewById(R.id.weight_editText)).
@@ -326,43 +335,43 @@ public class PersonalInfoActivity extends AppCompatActivity {
         // section 3 //////////////////
         switch (savedUserProfile.getbType()) {
             case ECTOMORPH:
-                ((Spinner) findViewById(R.id.body_type_spinner)).setSelection(0, true);
-                break;
-            case MESOMORPH:
                 ((Spinner) findViewById(R.id.body_type_spinner)).setSelection(1, true);
                 break;
-            case ENDOMORPH:
+            case MESOMORPH:
                 ((Spinner) findViewById(R.id.body_type_spinner)).setSelection(2, true);
+                break;
+            case ENDOMORPH:
+                ((Spinner) findViewById(R.id.body_type_spinner)).setSelection(3, true);
                 break;
         }
         ((Spinner) findViewById(R.id.num_meals_spinner)).
-                setSelection(savedUserProfile.getNumOfMeals() - 1, true);
+                setSelection(savedUserProfile.getNumOfMeals() - 1 + 1, true);
         switch (savedUserProfile.getActLevel()) {
             case SEDENTARY:
-                ((Spinner) findViewById(R.id.activity_level_spinner)).setSelection(0, true);
-                break;
-            case LIGHT_ACTIVE:
                 ((Spinner) findViewById(R.id.activity_level_spinner)).setSelection(1, true);
                 break;
-            case MODERATE_ACTIVE:
+            case LIGHT_ACTIVE:
                 ((Spinner) findViewById(R.id.activity_level_spinner)).setSelection(2, true);
                 break;
-            case HIGH_ACTIVE:
+            case MODERATE_ACTIVE:
                 ((Spinner) findViewById(R.id.activity_level_spinner)).setSelection(3, true);
                 break;
-            case VERY_HIGH_ACTIVE:
+            case HIGH_ACTIVE:
                 ((Spinner) findViewById(R.id.activity_level_spinner)).setSelection(4, true);
+                break;
+            case VERY_HIGH_ACTIVE:
+                ((Spinner) findViewById(R.id.activity_level_spinner)).setSelection(5, true);
                 break;
         }
         switch (savedUserProfile.getWeightGoal()) {
             case LOSE:
-                ((Spinner) findViewById(R.id.weight_goal_spinner)).setSelection(0, true);
-                break;
-            case BULKUP:
                 ((Spinner) findViewById(R.id.weight_goal_spinner)).setSelection(1, true);
                 break;
-            case MAINTAIN:
+            case BULKUP:
                 ((Spinner) findViewById(R.id.weight_goal_spinner)).setSelection(2, true);
+                break;
+            case MAINTAIN:
+                ((Spinner) findViewById(R.id.weight_goal_spinner)).setSelection(3, true);
                 break;
         }
         ((EditText) findViewById(R.id.calorie_offset_editText)).

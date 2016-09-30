@@ -16,6 +16,7 @@
 
 
     <string-array name="gender_array">
+        <item>Select one</item>
         <item>Male</item>
         <item>Female</item>
         <item>Breastfeeding Female</item>
@@ -23,12 +24,14 @@
     </string-array>
 
     <string-array name="body_type_array">
+        <item>Select one</item>
         <item>Ectomorph</item>
         <item>Mesomorph</item>
         <item>Endomorph</item>
     </string-array>
 
     <string-array name="num_meals_array">
+        <item>Select one</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>
@@ -40,6 +43,7 @@
     </string-array>
 
     <string-array name="activity_level_array">
+        <item>Select one</item>
         <item>Sedentary</item>
         <item>Light activity</item>
         <item>Moderate activity</item>
@@ -48,6 +52,7 @@
     </string-array>
 
     <string-array name="weight_goal_array">
+        <item>Select one</item>
         <item>Lose weight</item>
         <item>Bulk up</item>
         <!--item>Trim fat</item-->
