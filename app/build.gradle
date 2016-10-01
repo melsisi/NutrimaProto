@@ -40,4 +40,5 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.2.+'
     compile fileTree(include: '*.jar', dir: 'libs')
     compile 'com.android.support:multidex:1.0.0'
+
 }

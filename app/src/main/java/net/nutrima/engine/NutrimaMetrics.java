@@ -291,7 +291,7 @@ public class NutrimaMetrics {
     public void calcBmi(UserProfile userProfile){
         try {
             if (userProfile.getMetricImperial() == MetricStandard.IMPERIAL)
-                this.bmi = (userProfile.getWeight() * 703) / Math.pow(userProfile.getHeight(), 2);
+                this.bmi = (userProfile.getWeight() * 0.453592) / Math.pow((userProfile.getHeight()*0.0254), 2);
             else
                 this.bmi = (userProfile.getWeight()) / Math.pow((userProfile.getHeight() / 100), 2);
         } catch (ArithmeticException ae) {

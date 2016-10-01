@@ -3,4 +3,7 @@
     <color name="colorPrimary">#4293d0</color>
     <color name="colorPrimaryDark">#f29328</color>
     <color name="colorAccent">#85bc35</color>
+    <color name="facebookColor">#3b5998</color>
+    <color name="backgroundkColor">#EFE2CB</color>
+    <color name="googleplusColor">#d34836</color>
 </resources>
