@@ -14,7 +14,6 @@ public class MealNutrients {
     MaxMinNutrients fiber;
     MaxMinNutrients addedSugar;
 
-
     public int computeMaxMin (MaxMin m, int l, int r) {
         if (m == MaxMin.MIN) {
             if (l < r )
@@ -41,8 +40,8 @@ public class MealNutrients {
        return out;
     }
 
-
     public MealNutrients(NutrimaMetrics nutrimaMetrics, CurrentMetrics currentMetrics, UserProfile userProfile) {
+
         //Init
         calories    = new MaxMinNutrients();
         protein     = new MaxMinNutrients();
@@ -84,7 +83,11 @@ public class MealNutrients {
         satFat.min = 0;
 
         //Fibers
-        fiber.min = computeMaxMin(MaxMin.MIN, fiberMin, (int) (fiberMeal*.8));
+        if (currentMetrics.partOfDay == PartOfDay.END) {
+            fiber.min = fiberMin;
+        } else {
+            fiber.min = (int) (fiberMeal * 0.8);
+        }
         fiber.max = (int) (fiber.min * 1.2);
 
         //Sugar
