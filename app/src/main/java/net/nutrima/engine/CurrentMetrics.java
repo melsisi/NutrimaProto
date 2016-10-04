@@ -30,18 +30,18 @@ public class CurrentMetrics {
     int selenium=0; //mcg
 
     //Vitamins
-    int vitaminA; //mg
-    int vitaminE; //mg
-    int vitaminD; //IU
-    int vitaminC;//mg
-    int thiamin;
-    int riboflavin;//mg
-    int niacin;//mg
-    int vitaminB6;//mg
-    int vitaminB12; // mcg
-    int choline; //mg
-    int vitaminK; //mcg
-    int folate; //mcg
+    int vitaminA=0; //mg
+    int vitaminE=0; //mg
+    int vitaminD=0; //IU
+    int vitaminC=0;//mg
+    int thiamin=0;
+    int riboflavin=0;//mg
+    int niacin=0;//mg
+    int vitaminB6=0;//mg
+    int vitaminB12=0; // mcg
+    int choline=0; //mg
+    int vitaminK=0; //mcg
+    int folate=0; //mcg
 
     //Time in day
     PartOfDay partOfDay=PartOfDay.BEGIN;

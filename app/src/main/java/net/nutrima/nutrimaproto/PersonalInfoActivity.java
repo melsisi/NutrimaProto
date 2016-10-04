@@ -2,10 +2,9 @@ package net.nutrima.nutrimaproto;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -13,7 +12,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.TextView;
+
+import com.facebook.login.LoginManager;
 
 import net.nutrima.engine.ActivityLevel;
 import net.nutrima.engine.BodyType;
@@ -84,6 +84,16 @@ public class PersonalInfoActivity extends AppCompatActivity {
                 Intent activityChangeIntent = new Intent(PersonalInfoActivity.this, ProgressActivity.class);
                 startActivity(activityChangeIntent);
                 collectDataFromUI();
+            }
+        });
+
+        final Button logoutButton = (Button) findViewById(R.id.log_out_button);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                LoginManager.getInstance().logOut(); //Log out from Facebook
+                Intent activityChangeIntent = new Intent (PersonalInfoActivity.this, MainActivity.class);
+                startActivity(activityChangeIntent);
+                finish();
             }
         });
         //////////////////////////////////////////////////////////////////

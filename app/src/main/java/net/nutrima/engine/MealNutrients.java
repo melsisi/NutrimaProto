@@ -6,6 +6,7 @@ package net.nutrima.engine;
 
 public class MealNutrients {
 
+    //Macro Nutrients
     MaxMinNutrients calories;
     MaxMinNutrients protein;
     MaxMinNutrients carbs;

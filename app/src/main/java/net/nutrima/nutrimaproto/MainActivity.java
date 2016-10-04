@@ -85,7 +85,8 @@ public class MainActivity extends Activity {
         final AccessToken fbAccessToken = AccessToken.getCurrentAccessToken();
         if (fbAccessToken != null) {
             Log.i("Main Activity", "======= FB Button: Inside tokenn======= ");
-            setFacebookSession(fbAccessToken);
+            //--x--setFacebookSession(fbAccessToken);
+            new CognitoInternetAccess(fbAccessToken).execute();
             //btnLoginFacebook.setVisibility(View.GONE);
             Intent activityChangeIntent = new Intent(MainActivity.this, PersonalInfoActivity.class);
             startActivity(activityChangeIntent);
@@ -109,7 +110,7 @@ public class MainActivity extends Activity {
                         Log.i("Main Activity", "======= FB Button: Inside onSuccess======= ");
                         btnLoginFacebook.setVisibility(View.INVISIBLE);
                         new GetFbName(loginResult).execute();
-                        setFacebookSession(loginResult.getAccessToken());
+                        //setFacebookSession(loginResult.getAccessToken());
                         Intent activityChangeIntent = new Intent(MainActivity.this, PersonalInfoActivity.class);
                         startActivity(activityChangeIntent);
                         finish();
@@ -210,7 +211,8 @@ public class MainActivity extends Activity {
     }
 
     private void setFacebookSession(AccessToken accessToken) {
-        Log.i("Main Activity", "======= FB Button: Inside Token======= ");
+        Log.i("Main Activity", "======= FB Button: Inside Token, ======= ");
+        Log.i("Main Activity", accessToken.getToken());
         CognitoSyncClientManager.addLogins("graph.facebook.com",
                 accessToken.getToken());
         //btnLoginFacebook.setVisibility(View.GONE);
@@ -253,6 +255,29 @@ public class MainActivity extends Activity {
         client.disconnect();
     }
 
+    private class CognitoInternetAccess extends AsyncTask<Void, Void, String> {
+        private AccessToken accessToken;
+
+        public CognitoInternetAccess (AccessToken accessToken) {
+            this.accessToken = accessToken;
+        }
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        @Override
+        protected String doInBackground(Void... params) {
+            setFacebookSession(accessToken);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            super.onPostExecute(response);
+        }
+    }
+
+
     private class GetFbName extends AsyncTask<Void, Void, String> {
         private final LoginResult loginResult;
         private ProgressDialog dialog;
@@ -283,6 +308,7 @@ public class MainActivity extends Activity {
             parameters.putString("fields", "name");
             request.setParameters(parameters);
             GraphResponse graphResponse = request.executeAndWait();
+            setFacebookSession(loginResult.getAccessToken());
             try {
                 return graphResponse.getJSONObject().getString("name");
             } catch (JSONException e) {
@@ -299,6 +325,7 @@ public class MainActivity extends Activity {
                 Toast.makeText(MainActivity.this, "Unable to get user name from Facebook",
                         Toast.LENGTH_LONG).show();
             }
+
         }
     }
     @Override

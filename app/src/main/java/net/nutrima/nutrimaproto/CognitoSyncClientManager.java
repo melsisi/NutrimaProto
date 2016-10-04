@@ -49,7 +49,7 @@ public class CognitoSyncClientManager {
 
         if (useDeveloperAuthenticatedIdentities) {
             developerIdentityProvider = new DeveloperAuthenticationProvider(
-                    null, IDENTITY_POOL_ID, context, Regions.US_EAST_1);
+                    null, IDENTITY_POOL_ID, context, REGION);
             credentialsProvider = new CognitoCachingCredentialsProvider(context, developerIdentityProvider,
                     REGION);
             Log.i(TAG, "Using developer authenticated identities");
@@ -80,6 +80,7 @@ public class CognitoSyncClientManager {
         }
         logins.put(providerName, token);
         credentialsProvider.setLogins(logins);
+        credentialsProvider.refresh(); //Causes APP to crash but it updates AWS analytics with unAuthorised identity!!!
     }
 
     /**
