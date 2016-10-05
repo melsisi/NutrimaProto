@@ -83,6 +83,12 @@ public class CognitoSyncClientManager {
         credentialsProvider.refresh(); //Causes APP to crash but it updates AWS analytics with unAuthorised identity!!!
     }
 
+    public static String getUnAuthenticatedID () {
+        return credentialsProvider.getIdentityId();
+    }
+    public static void refresh () {
+        credentialsProvider.refresh();
+    }
     /**
      * Gets the singleton instance of the CognitoClient. init() must be called
      * prior to this.

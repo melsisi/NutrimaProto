@@ -139,6 +139,7 @@ public class MainActivity extends Activity {
         final Button button = (Button) findViewById(R.id.sneak_peak_button);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                new CognitoInternetAccess(null).execute();
                 Intent activityChangeIntent = new Intent(MainActivity.this, PersonalInfoActivity.class);
                 startActivity(activityChangeIntent);
             }
@@ -257,6 +258,7 @@ public class MainActivity extends Activity {
 
     private class CognitoInternetAccess extends AsyncTask<Void, Void, String> {
         private AccessToken accessToken;
+        String ID;
 
         public CognitoInternetAccess (AccessToken accessToken) {
             this.accessToken = accessToken;
@@ -267,16 +269,21 @@ public class MainActivity extends Activity {
         }
         @Override
         protected String doInBackground(Void... params) {
-            setFacebookSession(accessToken);
+            if (accessToken == null) {
+                ID = CognitoSyncClientManager.getUnAuthenticatedID();
+                //CognitoSyncClientManager.refresh();
+            } else {
+                setFacebookSession(accessToken);
+            }
             return null;
         }
 
         @Override
         protected void onPostExecute(String response) {
-            super.onPostExecute(response);
+            //super.onPostExecute(response);
+            Toast.makeText(MainActivity.this, "Unauthenticated Access! " + ID, Toast.LENGTH_LONG).show();
         }
     }
-
 
     private class GetFbName extends AsyncTask<Void, Void, String> {
         private final LoginResult loginResult;
@@ -328,6 +335,7 @@ public class MainActivity extends Activity {
 
         }
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
