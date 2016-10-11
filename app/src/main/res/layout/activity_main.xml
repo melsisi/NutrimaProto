@@ -8,6 +8,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
     tools:context="net.nutrima.nutrimaproto.MainActivity">
     <ScrollView android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,16 +31,17 @@
         android:layout_height="100dp"
         android:src="@drawable/the_logo"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/signup_via_email"
-        android:paddingTop="100dp" />
+
+            <android.support.v4.widget.Space
+                android:layout_width="match_parent"
+                android:layout_height="250dp" />
+
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editText"
+        android:hint="Sign in via email"
         android:layout_gravity="center_horizontal"/>
             <Button
                 android:layout_width="match_parent"
@@ -49,14 +52,7 @@
                 android:layout_marginTop="30dp"
                 android:textColor="@android:color/white" />
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/signup_with_google"
-                android:id="@+id/googleplus_button"
-                android:background="#d34836"
-                android:layout_marginTop="30dp"
-                android:textColor="@android:color/white" />
+
     <!--Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

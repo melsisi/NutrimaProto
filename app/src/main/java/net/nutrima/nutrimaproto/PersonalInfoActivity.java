@@ -91,6 +91,7 @@ public class PersonalInfoActivity extends AppCompatActivity {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 LoginManager.getInstance().logOut(); //Log out from Facebook
+                CognitoSyncClientManager.clear();
                 Intent activityChangeIntent = new Intent (PersonalInfoActivity.this, MainActivity.class);
                 startActivity(activityChangeIntent);
                 finish();

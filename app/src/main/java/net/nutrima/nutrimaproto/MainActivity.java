@@ -6,9 +6,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.amazon.identity.auth.device.authorization.api.AmazonAuthorizationManager;
@@ -38,6 +41,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -53,12 +58,15 @@ public class MainActivity extends Activity {
 
     private Button btnLoginFacebook;
     private CallbackManager callbackManager;
+
     private AmazonAuthorizationManager mAuthManager;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    EditText email ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,14 +108,13 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 // start Facebook Login
                 Log.i("Main Activity", "======= FB Button: Inside listen======= ");
-                LoginManager.getInstance().logInWithReadPermissions(MainActivity.this, Arrays.asList("public_profile", "user_friends","user_birthday","user_about_me","email"));
+                LoginManager.getInstance().logInWithReadPermissions(MainActivity.this, Arrays.asList("public_profile", "user_friends", "user_birthday", "user_about_me", "email"));
                 LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-
-
 
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         Log.i("Main Activity", "======= FB Button: Inside onSuccess======= ");
+                        CognitoSyncClientManager.clear(); //Clear an unauthorized access
                         btnLoginFacebook.setVisibility(View.INVISIBLE);
                         new GetFbName(loginResult).execute();
                         //setFacebookSession(loginResult.getAccessToken());
@@ -144,6 +151,29 @@ public class MainActivity extends Activity {
                 startActivity(activityChangeIntent);
             }
         });
+        email = (EditText) findViewById(R.id.editText);
+        email.addTextChangedListener(new TextWatcher() {
+            int textB4Change;
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                textB4Change = email.getText().length();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (email.getText().length() > textB4Change) {
+                    Intent activityChangeIntent = new Intent(MainActivity.this, LoginActivity.class);
+                    activityChangeIntent.putExtra("content", email.getText().toString());
+                    startActivity(activityChangeIntent);
+                }
+            }
+        });
+
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
@@ -247,6 +277,13 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        EditText email = (EditText) findViewById(R.id.editText);
+        email.setText("");
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
 
@@ -254,9 +291,10 @@ public class MainActivity extends Activity {
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
+
     }
 
-    private class CognitoInternetAccess extends AsyncTask<Void, Void, String> {
+    private class CognitoInternetAccess extends AsyncTask<Void, Void, Bundle> {
         private AccessToken accessToken;
         String ID;
 
@@ -268,24 +306,47 @@ public class MainActivity extends Activity {
             super.onPreExecute();
         }
         @Override
-        protected String doInBackground(Void... params) {
+        protected Bundle doInBackground(Void... params) {
             if (accessToken == null) {
                 ID = CognitoSyncClientManager.getUnAuthenticatedID();
                 //CognitoSyncClientManager.refresh();
             } else {
+                GraphRequest request = GraphRequest.newMeRequest(
+                        accessToken,
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(
+                                    JSONObject object,
+                                    GraphResponse response) {
+                                // Application code
+                                //Log.v("LoginActivity", response.toString());
+                                Bundle bFacebookData = getFacebookData(object);
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id, name, first_name, last_name, email, gender, birthday, location"); // Parámetros que pedimos a facebook
+                request.setParameters(parameters);
+                GraphResponse graphResponse = request.executeAndWait();
                 setFacebookSession(accessToken);
+                return getFacebookData(graphResponse.getJSONObject());
             }
             return null;
         }
 
         @Override
-        protected void onPostExecute(String response) {
+        protected void onPostExecute(Bundle response) {
             //super.onPostExecute(response);
-            Toast.makeText(MainActivity.this, "Unauthenticated Access! " + ID, Toast.LENGTH_LONG).show();
+            if (accessToken == null) {
+                Toast.makeText(MainActivity.this, "Please register to enjoy Nutrima full capability!", Toast.LENGTH_LONG).show();
+            } else {
+                if (response != null) {
+                    Toast.makeText(MainActivity.this, "Hello " + response.getString("name"), Toast.LENGTH_LONG).show();
+                }
+            }
         }
     }
 
-    private class GetFbName extends AsyncTask<Void, Void, String> {
+    private class GetFbName extends AsyncTask<Void, Void, Bundle> {
         private final LoginResult loginResult;
         private ProgressDialog dialog;
 
@@ -295,11 +356,11 @@ public class MainActivity extends Activity {
 
         @Override
         protected void onPreExecute() {
-            dialog = ProgressDialog.show(MainActivity.this, "Wait", "Getting user name");
+            //dialog = ProgressDialog.show(MainActivity.this, "Wait", "Getting user name");
         }
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected Bundle doInBackground(Void... params) {
             GraphRequest request = GraphRequest.newMeRequest(
                     loginResult.getAccessToken(),
                     new GraphRequest.GraphJSONObjectCallback() {
@@ -312,27 +373,23 @@ public class MainActivity extends Activity {
                         }
                     });
             Bundle parameters = new Bundle();
-            parameters.putString("fields", "name");
+            parameters.putString("fields", "id, name, first_name, last_name, email, gender, birthday, location"); // Parámetros que pedimos a facebook
             request.setParameters(parameters);
             GraphResponse graphResponse = request.executeAndWait();
             setFacebookSession(loginResult.getAccessToken());
-            try {
-                return graphResponse.getJSONObject().getString("name");
-            } catch (JSONException e) {
-                return null;
-            }
+            //TODO: Make a singleton class/bundle to hold account information from facebook or any other logins
+            return getFacebookData(graphResponse.getJSONObject());
         }
 
         @Override
-        protected void onPostExecute(String response) {
-            dialog.dismiss();
+        protected void onPostExecute(Bundle response) {
+            //dialog.dismiss();
             if (response != null) {
-                Toast.makeText(MainActivity.this, "Hello " + response, Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Hello " + response.getString("name"), Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(MainActivity.this, "Unable to get user name from Facebook",
                         Toast.LENGTH_LONG).show();
             }
-
         }
     }
 
@@ -342,4 +399,42 @@ public class MainActivity extends Activity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+
+    private Bundle getFacebookData(JSONObject object) {
+        try {
+            Bundle bundle = new Bundle();
+            String id = object.getString("id");
+
+            try {
+                URL profile_pic = new URL("https://graph.facebook.com/" + id + "/picture?width=200&height=150");
+                Log.i("profile_pic", profile_pic + "");
+                bundle.putString("profile_pic", profile_pic.toString());
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            bundle.putString("idFacebook", id);
+            if (object.has("name"))
+                bundle.putString("name", object.getString("name"));
+            if (object.has("first_name"))
+                bundle.putString("first_name", object.getString("first_name"));
+            if (object.has("last_name"))
+                bundle.putString("last_name", object.getString("last_name"));
+            if (object.has("email"))
+                bundle.putString("email", object.getString("email"));
+            if (object.has("gender"))
+                bundle.putString("gender", object.getString("gender"));
+            if (object.has("birthday"))
+                bundle.putString("birthday", object.getString("birthday"));
+            if (object.has("location"))
+                bundle.putString("location", object.getJSONObject("location").getString("name"));
+            return bundle;
+
+        } catch (JSONException j) {
+            j.printStackTrace();
+            return null;
+        }
+    }
 }

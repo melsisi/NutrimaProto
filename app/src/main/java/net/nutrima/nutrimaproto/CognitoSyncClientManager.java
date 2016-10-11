@@ -111,4 +111,8 @@ public class CognitoSyncClientManager {
         return credentialsProvider;
     }
 
+    public static void clear () {
+        credentialsProvider.clearCredentials();
+        credentialsProvider.clear();
+    }
 }
